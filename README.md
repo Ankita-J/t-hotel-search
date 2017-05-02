@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/Ankita-J/t-hotel-search.svg?branch=master)](https://travis-ci.org/Ankita-J/t-hotel-search)
+
+[![Coverage Status](https://coveralls.io/repos/github/Ankita-J/t-hotel-search/badge.svg?branch=master)](https://coveralls.io/github/Ankita-J/t-hotel-search)
 # \<t-search\>
 
 
