@@ -1,0 +1,1658 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for t-search\autocomplete.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">t-search/</a> autocomplete.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">3.5% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>11/314</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/150</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">2.86% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>1/35</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">3.54% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>11/311</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476
+477
+478
+479
+480
+481
+482
+483
+484
+485
+486
+487
+488
+489
+490
+491
+492
+493
+494
+495
+496
+497
+498
+499
+500
+501
+502
+503
+504
+505
+506
+507
+508
+509
+510
+511
+512
+513
+514
+515
+516
+517
+518
+519
+520
+521
+522
+523
+524
+525
+526
+527
+528
+529
+530
+531
+532</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">var AutoComplete = (function () {
+    "use strict";
+    var AutoComplete = <span class="fstat-no" title="function not covered" >function (params, component) {</span>
+        //Construct
+<span class="cstat-no" title="statement not covered" >        if (this) {</span>
+<span class="cstat-no" title="statement not covered" >            var i,</span>
+                self = this,
+                defaultParams = {
+                    limit: 10,
+                    method: "GET",
+                    noResult: component.emptyMessage,
+                    paramName: "query",
+                    select: <span class="fstat-no" title="function not covered" >function (input, item) {</span>
+<span class="cstat-no" title="statement not covered" >                        attr(input, { "data-autocomplete-old-value": input.value = attr(item, "data-autocomplete-value", item.innerHTML) });</span>
+<span class="cstat-no" title="statement not covered" >                        component.selectedValue = attr(item, "data-autocomplete-value", item.innerHTML);</span>
+<span class="cstat-no" title="statement not covered" >                        component.selectedItem = component.response[attr(item)];</span>
+<span class="cstat-no" title="statement not covered" >                        if (item.nodeName != "LI") {</span>
+<span class="cstat-no" title="statement not covered" >                            item = item.parentNode;</span>
+                        }
+<span class="cstat-no" title="statement not covered" >                        var itemIndex = item.getAttribute("data-index");</span>
+<span class="cstat-no" title="statement not covered" >                        var dataAutocompleteDetail = component.response[itemIndex];</span>
+<span class="cstat-no" title="statement not covered" >                        component.domHost.dataCity = dataAutocompleteDetail;</span>
+<span class="cstat-no" title="statement not covered" >                        component.fire('autosuggest-select', component.selectedItem);</span>
+<span class="cstat-no" title="statement not covered" >                        var setClear = component.children[1];</span>
+<span class="cstat-no" title="statement not covered" >                        component.fire('tab-next');</span>
+<span class="cstat-no" title="statement not covered" >                        if (mq) {</span>
+<span class="cstat-no" title="statement not covered" >                            component.domHost.querySelector("#start1").style.display = "block";</span>
+<span class="cstat-no" title="statement not covered" >                            component.domHost.querySelector("#end1").style.display = "block";</span>
+<span class="cstat-no" title="statement not covered" >                            component.domHost.querySelector("#travellField").style.display = "block";</span>
+<span class="cstat-no" title="statement not covered" >                            component.domHost.querySelector("#Button").style.display = "block";</span>
+<span class="cstat-no" title="statement not covered" >                            setClear.style.display = "block";</span>
+<span class="cstat-no" title="statement not covered" >                            var tool = component.domHost.querySelector("#toolbarAutoComplete");</span>
+<span class="cstat-no" title="statement not covered" >                            tool.hidden = true;</span>
+<span class="cstat-no" title="statement not covered" >                            var ul = component.querySelector("ul.ulClassMobile");</span>
+<span class="cstat-no" title="statement not covered" >                            component.querySelector("#dropBox").style.display = "none";</span>
+<span class="cstat-no" title="statement not covered" >                            component.querySelector("#clearContainer").style.display = "block";</span>
+<span class="cstat-no" title="statement not covered" >                            ul.removeAttribute("class");</span>
+                        }
+<span class="cstat-no" title="statement not covered" >                        closeBox(component.querySelector(".autocomplete"), false);</span>
+                    },
+                    open: <span class="fstat-no" title="function not covered" >function (input, result) {</span>
+<span class="cstat-no" title="statement not covered" >                        var self = this;</span>
+<span class="cstat-no" title="statement not covered" >                        Array.prototype.forEach.call(result.getElementsByTagName("li"), <span class="fstat-no" title="function not covered" >function (li) {</span></span>
+<span class="cstat-no" title="statement not covered" >                            li.onmousedown = <span class="fstat-no" title="function not covered" >function (event) {</span></span>
+<span class="cstat-no" title="statement not covered" >                                self.select(input, event.target);</span>
+                            };
+                        });
+                    },
+&nbsp;
+                    post: <span class="fstat-no" title="function not covered" >function (result, res, custParams, cityName) {</span>
+<span class="cstat-no" title="statement not covered" >                        try {</span>
+<span class="cstat-no" title="statement not covered" >                            if (!Array.prototype.includes) {</span>
+<span class="cstat-no" title="statement not covered" >                                Object.defineProperty(Array.prototype, "includes", {</span>
+                                    enumerable: false,
+                                    value: <span class="fstat-no" title="function not covered" >function (obj) {</span>
+<span class="cstat-no" title="statement not covered" >                                        var newArr = this.filter(<span class="fstat-no" title="function not covered" >function (el) {</span></span>
+<span class="cstat-no" title="statement not covered" >                                            return el == obj;</span>
+                                        });
+<span class="cstat-no" title="statement not covered" >                                        return newArr.length &gt; 0;</span>
+                                    }
+                                });
+                            }
+<span class="cstat-no" title="statement not covered" >                            component.$.spinner.hidden = true;</span>
+<span class="cstat-no" title="statement not covered" >                            var response = JSON.parse(res);</span>
+<span class="cstat-no" title="statement not covered" >                            if (response.status.isSuccessful) {</span>
+<span class="cstat-no" title="statement not covered" >                                var node = component.querySelector("#dropBox");</span>
+<span class="cstat-no" title="statement not covered" >                                while (node.hasChildNodes()) {</span>
+<span class="cstat-no" title="statement not covered" >                                    node.removeChild(node.lastChild);</span>
+                                }
+<span class="cstat-no" title="statement not covered" >                                component.response = new Array();</span>
+<span class="cstat-no" title="statement not covered" >                                response = response.items;</span>
+<span class="cstat-no" title="statement not covered" >                                var groupedByType = {};</span>
+<span class="cstat-no" title="statement not covered" >                                var typeArr2 = [];</span>
+<span class="cstat-no" title="statement not covered" >                                for (var item in response) {</span>
+<span class="cstat-no" title="statement not covered" >                                    var cityn = response[item].type.toUpperCase();</span>
+<span class="cstat-no" title="statement not covered" >                                    if (cityn === 'POINTOFINTEREST') {</span>
+<span class="cstat-no" title="statement not covered" >                                        cityn = "POINT OF INTEREST";</span>
+                                    }
+<span class="cstat-no" title="statement not covered" >                                    if (!typeArr2.includes(cityn)) {</span>
+<span class="cstat-no" title="statement not covered" >                                        typeArr2.push(cityn);</span>
+                                    }
+<span class="cstat-no" title="statement not covered" >                                    if (!groupedByType[cityn]) {</span>
+<span class="cstat-no" title="statement not covered" >                                        groupedByType[cityn] = [];</span>
+                                    }
+<span class="cstat-no" title="statement not covered" >                                    groupedByType[cityn].push(response[item]);</span>
+                                }
+<span class="cstat-no" title="statement not covered" >                                var typeUL = domCreate("ul")</span>
+<span class="cstat-no" title="statement not covered" >                                var ul = domCreate("ul")</span>
+<span class="cstat-no" title="statement not covered" >                                var dataIndex = 0;</span>
+<span class="cstat-no" title="statement not covered" >                                for (var t = 0; t &lt; typeArr2.length; t++) {</span>
+<span class="cstat-no" title="statement not covered" >                                    for (var i = 0; i &lt; groupedByType[typeArr2[t]].length; i++) {</span>
+<span class="cstat-no" title="statement not covered" >                                        component.response.push(groupedByType[typeArr2[t]][i]);</span>
+                                    }
+                                }
+<span class="cstat-no" title="statement not covered" >                                for (var t = 0; t &lt; typeArr2.length; t++) {</span>
+                                    //component.response = groupedByType[typeArr2[t]];
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                                    var createLi = <span class="fstat-no" title="function not covered" >function () {</span> <span class="cstat-no" title="statement not covered" >return domCreate("li"); </span>},</span>
+                                        autoReverse = <span class="fstat-no" title="function not covered" >function (param, limit) {</span>
+<span class="cstat-no" title="statement not covered" >                                            return (limit &lt; 0) ? param.reverse() : param;</span>
+                                        },
+                                        addLi = <span class="fstat-no" title="function not covered" >function (ul, li, response, index) {</span>
+<span class="cstat-no" title="statement not covered" >                                            var tempResponse = response;</span>
+<span class="cstat-no" title="statement not covered" >                                            if (index === 0 &amp;&amp; t === 0) {</span>
+<span class="cstat-no" title="statement not covered" >                                                tempResponse = "&lt;span class='boldText'&gt;" + tempResponse + "&lt;/span&gt;";</span>
+                                            }
+                                            else {
+<span class="cstat-no" title="statement not covered" >                                                tempResponse = tempResponse.replace(cityName, "&lt;span class='boldText'&gt;" + cityName + "&lt;/span&gt;");</span>
+                                            }
+<span class="cstat-no" title="statement not covered" >                                            li.innerHTML = tempResponse;</span>
+<span class="cstat-no" title="statement not covered" >                                            attr(li, { "data-autocomplete-value": response });</span>
+<span class="cstat-no" title="statement not covered" >                                            attr(li, { "data-index": index });</span>
+<span class="cstat-no" title="statement not covered" >                                            attrClass(li, "liColor");</span>
+<span class="cstat-no" title="statement not covered" >                                            ul.appendChild(li);</span>
+<span class="cstat-no" title="statement not covered" >                                            return createLi();</span>
+                                        },
+                                        addType = <span class="fstat-no" title="function not covered" >function (ul, response) {</span>
+<span class="cstat-no" title="statement not covered" >                                            var tdiv = domCreate("div");</span>
+<span class="cstat-no" title="statement not covered" >                                            var p = domCreate("span");</span>
+<span class="cstat-no" title="statement not covered" >                                            tdiv.id = "line";</span>
+<span class="cstat-no" title="statement not covered" >                                            tdiv.style.height = "10px";</span>
+<span class="cstat-no" title="statement not covered" >                                            p.style.color = "Silver";</span>
+<span class="cstat-no" title="statement not covered" >                                            p.style.borderbottomstyle = "solid";</span>
+<span class="cstat-no" title="statement not covered" >                                            p.innerHTML = response;</span>
+<span class="cstat-no" title="statement not covered" >                                            tdiv.appendChild(p);</span>
+<span class="cstat-no" title="statement not covered" >                                            ul.appendChild(tdiv);</span>
+                                        },
+                                        empty,
+                                        i = 0,
+                                        length = groupedByType[typeArr2[t]].length,
+                                        li = createLi(),
+                                        limit = custParams.limit,
+                                        propertie,
+                                        properties,
+                                        value;
+<span class="cstat-no" title="statement not covered" >                                    if (length) {</span>
+<span class="cstat-no" title="statement not covered" >                                        addType(ul, typeArr2[t])</span>
+<span class="cstat-no" title="statement not covered" >                                        response = autoReverse(groupedByType[typeArr2[t]], limit);</span>
+<span class="cstat-no" title="statement not covered" >                                        var item = null;</span>
+<span class="cstat-no" title="statement not covered" >                                        for (; i &lt; length &amp;&amp; (i &lt; Math.abs(limit) || !limit); i++) {</span>
+<span class="cstat-no" title="statement not covered" >                                            if (component.tokenParam != '')</span>
+<span class="cstat-no" title="statement not covered" >                                                item = response[i][component.tokenParam];</span>
+<span class="cstat-no" title="statement not covered" >                                            li = addLi(ul, li, item, dataIndex++);</span>
+                                        }
+                                    }
+                                    else {
+                                        //If the response is an object or an array and that the response is empty, so this script is here, 
+                                        //for the message no response.
+<span class="cstat-no" title="statement not covered" >                                        empty = true;</span>
+<span class="cstat-no" title="statement not covered" >                                        attrClass(li, "locked");</span>
+<span class="cstat-no" title="statement not covered" >                                        li = addLi(ul, li, custParams.noResult);</span>
+                                    }
+                                }//for
+<span class="cstat-no" title="statement not covered" >                                if (result.hasChildNodes()) {</span>
+<span class="cstat-no" title="statement not covered" >                                    result.removeChild(result.lastChild);</span>
+                                }
+<span class="cstat-no" title="statement not covered" >                                if (mq) {</span>
+<span class="cstat-no" title="statement not covered" >                                    var tool = component.domHost.querySelector("#toolbarAutoComplete");</span>
+<span class="cstat-no" title="statement not covered" >                                    tool.style.display = "block";</span>
+<span class="cstat-no" title="statement not covered" >                                    tool.hidden = false;</span>
+<span class="cstat-no" title="statement not covered" >                                    var inPut = tool.childNodes[2];</span>
+<span class="cstat-no" title="statement not covered" >                                    result.appendChild(ul);</span>
+<span class="cstat-no" title="statement not covered" >                                    attrClass(ul, "ulClassMobile");</span>
+                                }
+                                else {
+<span class="cstat-no" title="statement not covered" >                                    result.appendChild(ul);</span>
+                                }
+<span class="cstat-no" title="statement not covered" >                                attrClass(result, "autocomplete open");</span>
+<span class="cstat-no" title="statement not covered" >                                return empty;</span>
+                            }//if response
+                            else {
+<span class="cstat-no" title="statement not covered" >                                return empty;</span>
+                            }
+                        } catch (e) {
+<span class="cstat-no" title="statement not covered" >                            result.innerHTML = response;</span>
+                        }
+                    },
+                    pre: <span class="fstat-no" title="function not covered" >function (input) {</span>
+<span class="cstat-no" title="statement not covered" >                        return input.value;</span>
+                    },
+                    selector: ["input[data-autocomplete]"]
+                    // selector:["input[ data-autocomplete-dealy]"]
+                },
+                selectors;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            self._custArgs = [];</span>
+<span class="cstat-no" title="statement not covered" >            self._args = merge(defaultParams, params || {});</span>
+<span class="cstat-no" title="statement not covered" >            selectors = self._args.selector;</span>
+<span class="cstat-no" title="statement not covered" >            if (!Array.isArray(selectors)) {</span>
+<span class="cstat-no" title="statement not covered" >                selectors = [selectors];</span>
+            }
+<span class="cstat-no" title="statement not covered" >            selectors.forEach(<span class="fstat-no" title="function not covered" >function (selector) {</span></span>
+<span class="cstat-no" title="statement not covered" >                Array.prototype.forEach.call(component.querySelectorAll(selector), <span class="fstat-no" title="function not covered" >function (input) {</span></span>
+<span class="cstat-no" title="statement not covered" >                    if (input.nodeName.match(/^INPUT$/i) &amp;&amp; input.type.match(/^TEXT|SEARCH$/i)) {</span>
+<span class="cstat-no" title="statement not covered" >                        var oldValueLabel = "data-autocomplete-old-value",</span>
+                            result = component.$.dropBox,
+                            request,
+                            positionLambda = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                                attr(result, {</span>
+                                    "class": "autocomplete"
+                                });
+                            },
+                            destroyLambda = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                                input.onfocus = input.onblur = input.onkeyup = null;</span>
+<span class="cstat-no" title="statement not covered" >                                input.removeEventListener("position", positionLambda);</span>
+<span class="cstat-no" title="statement not covered" >                                input.removeEventListener("destroy", destroyLambda);</span>
+<span class="cstat-no" title="statement not covered" >                                result.parentNode.removeChild(result);</span>
+<span class="cstat-no" title="statement not covered" >                                self.CustParams(input, true);</span>
+                            },
+                            focusLamdba = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                                var dataAutocompleteOldValue = attr(input, oldValueLabel);</span>
+<span class="cstat-no" title="statement not covered" >                                if (!component.caching &amp;&amp; result.hasChildNodes()) {</span>
+<span class="cstat-no" title="statement not covered" >                                    result.removeChild(result.lastChild);</span>
+                                }
+<span class="cstat-no" title="statement not covered" >                                if (!dataAutocompleteOldValue || input.value != dataAutocompleteOldValue) {</span>
+<span class="cstat-no" title="statement not covered" >                                    attrClass(result, "autocomplete open");</span>
+                                }
+                            };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                        attr(input, { "autocomplete": "off" });</span>
+<span class="cstat-no" title="statement not covered" >                        positionLambda(input, result);</span>
+<span class="cstat-no" title="statement not covered" >                        input.addEventListener("position", positionLambda);</span>
+<span class="cstat-no" title="statement not covered" >                        input.addEventListener("destroy", destroyLambda);</span>
+<span class="cstat-no" title="statement not covered" >                        Polymer.dom(component.querySelector('#append')).appendChild(result);</span>
+<span class="cstat-no" title="statement not covered" >                        input.onfocus = focusLamdba;</span>
+<span class="cstat-no" title="statement not covered" >                        input.onblur = closeBox(null, result);</span>
+<span class="cstat-no" title="statement not covered" >                        Polymer.dom(component.$.clearContainer).node.setAttribute('class', 'hide')</span>
+&nbsp;
+                    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                    input.onkeyup = <span class="fstat-no" title="function not covered" >function (e) {</span></span>
+<span class="cstat-no" title="statement not covered" >                        var first = result.querySelector("li:first-child:not(.locked)"),</span>
+                            input = e.target,
+                            custParams = self.CustParams(input),
+                            inputValue = custParams.pre(input),
+                            dataAutocompleteOldValue = attr(input, oldValueLabel),
+                            keyCode = e.keyCode,
+                            currentIndex,
+                            position,
+                            lisCount,
+                            liActive;
+                        //------------------------------------------
+<span class="cstat-no" title="statement not covered" >                        if (this.value == "") {</span>
+<span class="cstat-no" title="statement not covered" >                            Polymer.dom(component.$.autoInput).node.setAttribute("style", "width:99%");</span>
+<span class="cstat-no" title="statement not covered" >                            Polymer.dom(component.$.clearContainer).node.setAttribute('class', 'hide')</span>
+                        }
+                        else {
+<span class="cstat-no" title="statement not covered" >                            this.domHost.querySelector("#autoSuggest").style.color = "lightgray";</span>
+<span class="cstat-no" title="statement not covered" >                            Polymer.dom(component.$.autoInput).node.setAttribute("style", "width:99%");</span>
+<span class="cstat-no" title="statement not covered" >                            Polymer.dom(component.$.clearContainer).node.setAttribute('class', 'unhide')</span>
+                        }
+                        //--------------------------------------------
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                        if (keyCode == 13 &amp;&amp; attrClass(result).indexOf("open") != -1) {</span>
+<span class="cstat-no" title="statement not covered" >                            liActive = result.querySelector("li.active");</span>
+<span class="cstat-no" title="statement not covered" >                            if (liActive !== null) {</span>
+<span class="cstat-no" title="statement not covered" >                                self._args.select(input, liActive);</span>
+<span class="cstat-no" title="statement not covered" >                                attrClass(result, "autocomplete");</span>
+<span class="cstat-no" title="statement not covered" >                                closeBox(null, result);</span>
+                            }
+&nbsp;
+                        }
+                        else {
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                            if (keyCode == 38 || keyCode == 40) {</span>
+<span class="cstat-no" title="statement not covered" >                                liActive = result.querySelector("li.active");</span>
+<span class="cstat-no" title="statement not covered" >                                if (!liActive) {</span>
+<span class="cstat-no" title="statement not covered" >                                    liActive = result.querySelector("div");</span>
+                                }
+<span class="cstat-no" title="statement not covered" >                                if (liActive) {</span>
+<span class="cstat-no" title="statement not covered" >                                    currentIndex = Array.prototype.indexOf.call(liActive.parentNode.children, liActive);</span>
+<span class="cstat-no" title="statement not covered" >                                    position = currentIndex + (keyCode - 39);</span>
+                                     ////////////////////////
+<span class="cstat-no" title="statement not covered" >                                     if(position === 1){</span>
+<span class="cstat-no" title="statement not covered" >                                        this.domHost.querySelector("#dropBox").scrollTop = 0;</span>
+                                    }
+<span class="cstat-no" title="statement not covered" >                                     if(position === 9){</span>
+<span class="cstat-no" title="statement not covered" >                                         this.domHost.querySelector("#dropBox").scrollTop = 300;</span>
+                                     }
+<span class="cstat-no" title="statement not covered" >                                     if(position &gt;= 2 &amp;&amp; position &lt;= 10 &amp;&amp; keyCode ==40){</span>
+<span class="cstat-no" title="statement not covered" >                                     this.domHost.querySelector("#dropBox").scrollTop = this.domHost.querySelector("#dropBox").scrollTop + 20;</span>
+                                    }
+<span class="cstat-no" title="statement not covered" >                                     if(keyCode == 38){</span>
+<span class="cstat-no" title="statement not covered" >                                        this.domHost.querySelector("#dropBox").scrollTop = this.domHost.querySelector("#dropBox").scrollTop - 20;</span>
+                                    }
+                                    ///////////////////////////////
+<span class="cstat-no" title="statement not covered" >                                    lisCount = result.getElementsByTagName("li").length + 2;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                                    attrClass(liActive, "selected");</span>
+<span class="cstat-no" title="statement not covered" >                                    if (position &lt;= 0) {</span>
+<span class="cstat-no" title="statement not covered" >                                        position = lisCount + 1;</span>
+                                    } else <span class="cstat-no" title="statement not covered" >if (position &gt; lisCount) {</span>
+<span class="cstat-no" title="statement not covered" >                                        position = 0;</span>
+                                    }
+<span class="cstat-no" title="statement not covered" >                                    var nextElement = liActive.parentElement.childNodes.item(position);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                                    if (nextElement == null || nextElement.tagName == 'DIV') {</span>
+<span class="cstat-no" title="statement not covered" >                                        nextElement = liActive.parentElement.childNodes.item(position + ((keyCode - 39)));</span>
+                                    }
+<span class="cstat-no" title="statement not covered" >                                    attrClass(nextElement, "active");</span>
+                                } else <span class="cstat-no" title="statement not covered" >if (first) {</span>
+<span class="cstat-no" title="statement not covered" >                                    attrClass(first, "active");</span>
+                                }
+                            } else <span class="cstat-no" title="statement not covered" >if (keyCode &lt; 35 || keyCode &gt; 40) {</span>
+<span class="cstat-no" title="statement not covered" >                                if (inputValue &amp;&amp; custParams.url) {</span>
+<span class="cstat-no" title="statement not covered" >                                    if (inputValue.length &gt;= component.minimumCharacters &amp;&amp; component.selectedValue != inputValue) {                                        </span>
+<span class="cstat-no" title="statement not covered" >                                        component.$.spinner.hidden = false;</span>
+<span class="cstat-no" title="statement not covered" >                                        setTimeout(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                                            request = ajax(request, custParams, inputValue.trim(), input, result, component.subType, component.queryParams);</span>
+                                        }, component.delay);
+                                    }
+                                    else {
+<span class="cstat-no" title="statement not covered" >                                        if (result.hasChildNodes()) {</span>
+<span class="cstat-no" title="statement not covered" >                                            result.removeChild(result.lastChild);</span>
+                                        }
+                                    }
+<span class="cstat-no" title="statement not covered" >                                    if (mq) {</span>
+<span class="cstat-no" title="statement not covered" >                                        if (inputValue.length &gt;= 0) {</span>
+<span class="cstat-no" title="statement not covered" >                                            if (mq) {</span>
+<span class="cstat-no" title="statement not covered" >                                                component.domHost.querySelector("#start1").style.display = "none";</span>
+<span class="cstat-no" title="statement not covered" >                                                component.domHost.querySelector("#end1").style.display = "none";</span>
+<span class="cstat-no" title="statement not covered" >                                                component.domHost.querySelector("#travellField").style.display = "none";</span>
+<span class="cstat-no" title="statement not covered" >                                                component.domHost.querySelector("#Button").style.display = "none";</span>
+<span class="cstat-no" title="statement not covered" >                                                component.domHost.querySelector("#dropBox").style.display = "block";</span>
+                                            }
+<span class="cstat-no" title="statement not covered" >                                            var toolbar = component.domHost.querySelector("#toolbarAutoComplete");</span>
+<span class="cstat-no" title="statement not covered" >                                            var itm = this;</span>
+<span class="cstat-no" title="statement not covered" >                                            var cln;</span>
+<span class="cstat-no" title="statement not covered" >                                            var div;</span>
+<span class="cstat-no" title="statement not covered" >                                            cln = toolbar.querySelector("#spanAutoId");</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                                            if (cln == null) {</span>
+<span class="cstat-no" title="statement not covered" >                                                cln = itm.cloneNode(true);</span>
+<span class="cstat-no" title="statement not covered" >                                                div = domCreate("div");</span>
+<span class="cstat-no" title="statement not covered" >                                                div.style.borderBottom = "1px solid lightgray";</span>
+<span class="cstat-no" title="statement not covered" >                                                div.style.position = "relative";</span>
+<span class="cstat-no" title="statement not covered" >                                                div.style.height = "15px";</span>
+<span class="cstat-no" title="statement not covered" >                                                div.style.width = "100%";</span>
+<span class="cstat-no" title="statement not covered" >                                                div.setAttribute("id", "cloneDiv")</span>
+                                                // div.style.top = "-40px";
+<span class="cstat-no" title="statement not covered" >                                                div.style.fontSize = "18px";</span>
+<span class="cstat-no" title="statement not covered" >                                                div.style.fontFamily = "roboto";</span>
+<span class="cstat-no" title="statement not covered" >                                                div.appendChild(cln);</span>
+<span class="cstat-no" title="statement not covered" >                                                toolbar.appendChild(div);</span>
+                                            }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                                            cln.setAttribute("id", "spanAutoId");</span>
+<span class="cstat-no" title="statement not covered" >                                            cln.style.width = "";</span>
+<span class="cstat-no" title="statement not covered" >                                            cln.style.color = "";</span>
+<span class="cstat-no" title="statement not covered" >                                            attrClass(cln, "automobileInput");</span>
+<span class="cstat-no" title="statement not covered" >                                            cln.value = input.value;</span>
+&nbsp;
+                                            /*Dummy blank ul to create mobile view on type of 1 char */
+<span class="cstat-no" title="statement not covered" >                                            var ul = domCreate("ul");</span>
+<span class="cstat-no" title="statement not covered" >                                            toolbar.style.display = "block";</span>
+<span class="cstat-no" title="statement not covered" >                                            toolbar.hidden = false;</span>
+<span class="cstat-no" title="statement not covered" >                                            var inPut = toolbar.childNodes[2];</span>
+<span class="cstat-no" title="statement not covered" >                                            result.appendChild(ul);</span>
+<span class="cstat-no" title="statement not covered" >                                            attrClass(ul, "ulClassMobile");</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                                            if (inputValue.length &gt;= component.minimumCharacters) {</span>
+<span class="cstat-no" title="statement not covered" >                                                component.$.spinner.hidden = false;</span>
+<span class="cstat-no" title="statement not covered" >                                                setTimeout(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                                                    request = ajax(request, custParams, inputValue.trim(), input, result, component.subType, component.queryParams);</span>
+                                                }, component.delay);
+                                            }
+<span class="cstat-no" title="statement not covered" >                                            var setvalue = component.domHost.querySelector("#spanAutoId");</span>
+<span class="cstat-no" title="statement not covered" >                                            setvalue.focus();</span>
+<span class="cstat-no" title="statement not covered" >                                            setvalue.onkeyup = <span class="fstat-no" title="function not covered" >function (e) {</span></span>
+<span class="cstat-no" title="statement not covered" >                                                inputValue = cln.value;</span>
+<span class="cstat-no" title="statement not covered" >                                                setTimeout(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                                                    if (inputValue.length &gt;= component.minimumCharacters) {</span>
+<span class="cstat-no" title="statement not covered" >                                                        request = ajax(request, custParams, inputValue.trim(), input, result, component.subType, component.queryParams);</span>
+                                                    }
+<span class="cstat-no" title="statement not covered" >                                                    if (inputValue.length &gt;= 0) {</span>
+<span class="cstat-no" title="statement not covered" >                                                        var node = component.querySelector("#dropBox");</span>
+<span class="cstat-no" title="statement not covered" >                                                        while (node.hasChildNodes()) {</span>
+<span class="cstat-no" title="statement not covered" >                                                            node.removeChild(node.lastChild);</span>
+                                                        }
+<span class="cstat-no" title="statement not covered" >                                                        var toolbar = component.domHost.querySelector("#toolbarAutoComplete");</span>
+<span class="cstat-no" title="statement not covered" >                                                        var ul = domCreate("ul");</span>
+<span class="cstat-no" title="statement not covered" >                                                        toolbar.style.display = "block";</span>
+<span class="cstat-no" title="statement not covered" >                                                        toolbar.hidden = false;</span>
+<span class="cstat-no" title="statement not covered" >                                                        var inPut = toolbar.childNodes[2];</span>
+<span class="cstat-no" title="statement not covered" >                                                        node.appendChild(ul);</span>
+<span class="cstat-no" title="statement not covered" >                                                        attrClass(ul, "ulClassMobile");</span>
+                                                    }
+                                                }, component.delay);
+&nbsp;
+                                            }
+                                        }
+                                        else {
+<span class="cstat-no" title="statement not covered" >                                            component.domHost.querySelector("#toolbarAutoComplete").style.display = "none";</span>
+<span class="cstat-no" title="statement not covered" >                                            if (result.hasChildNodes()) {</span>
+<span class="cstat-no" title="statement not covered" >                                                result.removeChild(result.lastChild);</span>
+                                            }
+&nbsp;
+                                        }
+                                    }
+                                }
+                            }
+                        };
+                    }
+                });
+            });
+        } else {
+<span class="cstat-no" title="statement not covered" >            new AutoComplete(params, component);</span>
+        }
+    };
+    //call to api
+    AutoComplete.prototype = {
+        CustParams: <span class="fstat-no" title="function not covered" >function (input, toDelete) {</span>
+<span class="cstat-no" title="statement not covered" >            var dataAutocompleteIdLabel = "data-autocomplete-id",</span>
+                self = this,
+                prefix = "data-autocomplete",
+                params = {
+                    limit: prefix + "-limit",
+                    method: prefix + "-method",
+                    noResult: prefix + "-no-result",
+                    paramName: prefix + "-param-name",
+                    delay: prefix + "-delay",
+                    url: prefix
+                },
+                paramsAttribute = Object.getOwnPropertyNames(params),
+                i;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            if (toDelete) {</span>
+<span class="cstat-no" title="statement not covered" >                delete self._custArgs[attr(input, dataAutocompleteIdLabel)];</span>
+            } else {
+<span class="cstat-no" title="statement not covered" >                if (!input.hasAttribute(dataAutocompleteIdLabel)) {</span>
+<span class="cstat-no" title="statement not covered" >                    input.setAttribute(dataAutocompleteIdLabel, self._custArgs.length);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                    for (i = paramsAttribute.length - 1; i &gt;= 0; i--) {</span>
+<span class="cstat-no" title="statement not covered" >                        params[paramsAttribute[i]] = attr(input, params[paramsAttribute[i]]);</span>
+                    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                    for (i in params) {</span>
+<span class="cstat-no" title="statement not covered" >                        if (params.hasOwnProperty(i) &amp;&amp; !params[i]) {</span>
+<span class="cstat-no" title="statement not covered" >                            delete params[i];</span>
+                        }
+                    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                    if (params.limit) {</span>
+<span class="cstat-no" title="statement not covered" >                        if (isNaN(params.limit)) {</span>
+<span class="cstat-no" title="statement not covered" >                            delete params.limit;</span>
+                        } else {
+<span class="cstat-no" title="statement not covered" >                            params.limit = parseInt(params.limit);</span>
+                        }
+                    }
+<span class="cstat-no" title="statement not covered" >                    self._custArgs.push(merge(self._args, params));</span>
+                }
+<span class="cstat-no" title="statement not covered" >                return self._custArgs[attr(input, dataAutocompleteIdLabel)];</span>
+            }
+        }
+    };
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function ajax(request, custParams, value, input, result, subType, queryParams) {</span>
+<span class="cstat-no" title="statement not covered" >        if (request) {</span>
+<span class="cstat-no" title="statement not covered" >            request.abort();</span>
+        }
+<span class="cstat-no" title="statement not covered" >        var method = custParams.method,</span>
+            url = custParams.url;
+<span class="cstat-no" title="statement not covered" >        url = url + value;</span>
+<span class="cstat-no" title="statement not covered" >        if (subType != '')</span>
+<span class="cstat-no" title="statement not covered" >            url = url + "/" + subType;</span>
+<span class="cstat-no" title="statement not covered" >        if (queryParams != "") {</span>
+<span class="cstat-no" title="statement not covered" >            url += "?" + queryParams;</span>
+        }
+<span class="cstat-no" title="statement not covered" >        request = new XMLHttpRequest();</span>
+<span class="cstat-no" title="statement not covered" >        request.open(method, url, true);</span>
+<span class="cstat-no" title="statement not covered" >        request.setRequestHeader("Content-type", "application/json");</span>
+<span class="cstat-no" title="statement not covered" >        request.setRequestHeader("Accept", "application/json");</span>
+<span class="cstat-no" title="statement not covered" >        request.onreadystatechange = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            if (request.readyState == 4 &amp;&amp; request.status == 200) {</span>
+<span class="cstat-no" title="statement not covered" >                if (!custParams.post(result, request.response, custParams, toTitleCase(value))) {</span>
+<span class="cstat-no" title="statement not covered" >                    custParams.open(input, result);</span>
+                }
+            }
+        };
+<span class="cstat-no" title="statement not covered" >        request.send(queryParams);</span>
+<span class="cstat-no" title="statement not covered" >        return request;</span>
+    }
+<span class="fstat-no" title="function not covered" >    function toTitleCase(str) {</span>
+<span class="cstat-no" title="statement not covered" >        return str.replace(/\w\S*/g, <span class="fstat-no" title="function not covered" >function (txt) {</span> <span class="cstat-no" title="statement not covered" >return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); </span>});</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function closeBox(result, closeNow) {</span>
+<span class="cstat-no" title="statement not covered" >        if (closeNow) {</span>
+<span class="cstat-no" title="statement not covered" >            attrClass(result, "autocomplete");</span>
+        }
+        else {
+<span class="cstat-no" title="statement not covered" >            setTimeout(<span class="fstat-no" title="function not covered" >function () {</span> <span class="cstat-no" title="statement not covered" >closeBox(result, true); </span>}, 150);</span>
+        }
+    }
+&nbsp;
+    //Method deported
+<span class="fstat-no" title="function not covered" >    function merge(obj1, obj2) {</span>
+<span class="cstat-no" title="statement not covered" >        var concat = {},</span>
+            tmp;
+<span class="cstat-no" title="statement not covered" >        for (tmp in obj1) {</span>
+<span class="cstat-no" title="statement not covered" >            concat[tmp] = obj1[tmp];</span>
+        }
+<span class="cstat-no" title="statement not covered" >        for (tmp in obj2) {</span>
+<span class="cstat-no" title="statement not covered" >            concat[tmp] = obj2[tmp];</span>
+        }
+<span class="cstat-no" title="statement not covered" >        return concat;</span>
+    }
+    return AutoComplete;
+}());
+&nbsp;
+<span class="fstat-no" title="function not covered" >function attr(item, attrs, defaultValue) {</span>
+<span class="cstat-no" title="statement not covered" >    if (item) {</span>
+<span class="cstat-no" title="statement not covered" >        try {</span>
+<span class="cstat-no" title="statement not covered" >            for (var key in attrs) {</span>
+<span class="cstat-no" title="statement not covered" >                item.setAttribute(key, attrs[key]);</span>
+            }
+        } catch (e) {
+<span class="cstat-no" title="statement not covered" >            return item.hasAttribute(attrs) ? item.getAttribute(attrs) : defaultValue;</span>
+        }
+    }
+}
+&nbsp;
+<span class="fstat-no" title="function not covered" >function attrClass(item, value) {</span>
+<span class="cstat-no" title="statement not covered" >    if (item) {</span>
+<span class="cstat-no" title="statement not covered" >        return attr(item, !value ? "class" : { "class": value });</span>
+    }
+}
+&nbsp;
+<span class="fstat-no" title="function not covered" >function domCreate(item) {</span>
+<span class="cstat-no" title="statement not covered" >    return document.createElement(item);</span>
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri May 05 2017 11:27:56 GMT+0530 (India Standard Time)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

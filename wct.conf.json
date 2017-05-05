@@ -8,7 +8,7 @@
           "dir": "./coverage",
           "reporters": ["text-summary", "lcov"],
           "include": [
-              "t-search.html"
+              "/t-search.html"
           ],
           "exclude": []
       },
