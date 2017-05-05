@@ -1,4 +1,5 @@
 <link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/app-localize-behavior/app-localize-behavior.html">
 <link rel="import" href="bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="bower_components/paper-item/paper-item.html">
@@ -87,9 +88,9 @@ The form handles below mentioned scenarios on its own.
             <paper-button toggles id="buttons" on-tap='_doneRoomCard'>Done</paper-button>
           </app-toolbar>
 
-          <!--Toolbar to show on mobile screen for date picker.
+          <!--Toolbar to show on mobile screen for datepicker.
           This is hidden while user is working desktop mode or tablet mode.
-          It will come in picture after user clicking on date picker at mobile screen.       -->
+          It will come in picture after user clicking on datepicker at mobile screen.       -->
 
           <app-toolbar hidden$="{{showDatePicker}}" id="toolbarDatePicker" class="row-lg-height row-md-height row-sm-height row-xs-height">
             <div id="selectDate">
@@ -112,20 +113,19 @@ The form handles below mentioned scenarios on its own.
           </app-toolbar>
 
 
-          <!--Main toolbar which contains auto suggest dropdown, date pickers and travellers drop down at all screens. -->
+          <!--Main toolbar which contains auto suggest dropdown, datepickers and travellers drop down at all screens. -->
           <app-toolbar id="mainToolbar" class="row-lg-height row-md-height row-sm-height row-xs-height">
-
             <form is="iron-form" id="form" method="post" action="/form/handler">
               <div required auto-validate class="col-lg-5 col-md-5 col-sm-12 col-xs-12" id="deskinput">
                 <t-autosuggest required auto-validate id="location" name="location" selected-item="{{location}}" query-params="token={{tokenResponse.authenticationToken}}"
-                  label="Enter city, airport, address or point of interest" token-param="formattedAddress" data-url$="{{dataUrl}}">
+                  label="Enter city, airport or point of interest" token-param="formattedAddress" data-url$="{{dataUrl}}">
                 </t-autosuggest>
               </div>
 
 
               <div id="start1" class="col-lg-1 col-md-1 col-sm-3 col-xs-6">
-                <t-input-date-picker required auto-validate error-message="Enter check in" class="suggestions" date-format="MM/DD/YYYY" id="start"
-                  label="Check in" min-date="[[minDatetoday]]" max-date="[[maxDate]]" on-keydown="_keypress" on-tap="_openDatePicker"
+                <t-input-date-picker required auto-validate error-message="Enter check in" class="suggestions" date-format="MM/DD/YYYY"
+                  id="start" label="Check in" min-date="[[minDate]]" max-date="[[maxDate]]" on-keydown="_keypress" on-tap="_openDatePicker"
                   on-focus="this.blur()">
                 </t-input-date-picker>
               </div>
@@ -138,7 +138,7 @@ The form handles below mentioned scenarios on its own.
 
               <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12" id="travellField">
                 <paper-dropdown-menu on-tap="_dismisCard" required auto-validate error-message="Required Field" class="suggestions" id="deskinput1"
-                  readonly>
+                  readonly on-keydown="_tabPress">
                   <paper-listbox class="dropdown-content" id="listbox" selected="{{choice}}">
                     <paper-item class="trvellerItem" id="adult1Room1" count-adult="1" count-room="1">1 Adult in 1 Room</paper-item>
                     <paper-item class="trvellerItem" id="adult2Room1" count-adult="2" count-room="1">2 Adults in 1 Room</paper-item>
@@ -162,7 +162,7 @@ The form handles below mentioned scenarios on its own.
     </div>
     <div class="item" id="card" smallMobileView$="{{smallMobileView}}" MobileView$="{{mobileView}}" TabletView$="{{tabletView}}"
       DesktopView$="{{desktopView}}" largeDesktopView$="{{largeDesktopView}}">
-      <paper-card hidden$="{{showTravellersCard}}" id="paperCard" class="paperCard">
+      <paper-card  hidden$="{{showTravellersCard}}" id="paperCard" class="paperCard">
         <div>
           <choice-card id="choiceCard"></choice-card>
         </div>
@@ -174,6 +174,10 @@ The form handles below mentioned scenarios on its own.
     var mqu = false, mq = false, mql = false, doneStartDate, doneEndDate;
     Polymer({
       is: 't-search',
+      /*.........................................................*/
+      behaviors: [
+        Polymer.AppLocalizeBehavior
+      ],
       properties: {
         /**
         * This contain search form to search a hotel based on location, check-in date, check-out date and travellers.
@@ -214,8 +218,8 @@ The form handles below mentioned scenarios on its own.
           value: false
         },
         /**
-         * Property to set iron media queries for tablet.
          *@private
+         * Property to set iron media queries for tablet.         
          **/
         tabletView: {
           type: Boolean,
@@ -239,7 +243,7 @@ The form handles below mentioned scenarios on its own.
         },
         /**
         *@private
-         * Property to toggle toolbar of date picker field for mobile view.
+         * Property to toggle toolbar of datepicker field for mobile view.
          **/
         showDatePicker: {
           type: Boolean,
@@ -253,14 +257,14 @@ The form handles below mentioned scenarios on its own.
         location: String,
 
         /**
-        *return the min date of check in date and checkout date as today
+        *return the min date of check in datepicker and checkout datepicker as today.
         */
 
-        minDatetoday: {
+        minDate: {
           value: function () {
-            var setMinDatetoToday = new Date();
-            setMinDatetoToday.setDate(setMinDatetoToday.getDate() - 1);
-            return setMinDatetoToday;
+            var setMinDate = new Date();
+            setMinDate.setDate(setMinDate.getDate() - 1);
+            return setMinDate;
           }
         },
 
@@ -290,7 +294,7 @@ The form handles below mentioned scenarios on its own.
         },
         /**
         *@private
-         * Property to insure whether done button of date picker toolbar for mobile view is clicked or not.
+         * Property to insure whether done button of datepicker toolbar for mobile view is clicked or not.
          **/
         doneDatePicker: {
           type: Boolean,
@@ -298,7 +302,7 @@ The form handles below mentioned scenarios on its own.
         },
 
         /*
-        *Set to max date of checkin date picker and checkout date picker.
+        *Set to max date of checkin datepicker and checkout datepicker.
         *Returns the max date after 1 year.           
         *Date format is mm/dd/yyyy.
         */
@@ -328,12 +332,27 @@ The form handles below mentioned scenarios on its own.
          **/
         travellersFinalData: {
           type: Array
+        },
+
+        /*.........................................................*/
+        option: {
+          type: Object
+        },
+        /**
+        *@private
+        *This property is used for localization purpose.
+        **/
+        language: {
+          value: 'en',
+          type: String
         }
 
       },
-
+      attached: function () {
+        this.loadResources(this.resolveUrl('./locales.json'));
+      },
       /*      
-      * Function set to keypress event of date picker.
+      * Function set to keypress event of datepicker.
       *prevent user to input by typing.
       **/
 
@@ -345,16 +364,19 @@ The form handles below mentioned scenarios on its own.
           return false;
         }
       },
-
       /**
-       * Functions to set view of internet explorer.
+       * Function to set view of internet explorer.
        * And also work for other than internet explorer.
-       * */
+       **/
       _largeDesktopViewIE: function (largeDesktopView) {
         // Internet Explorer 6-11
         var isIE = /*@cc_on!@*/false || !!document.documentMode;
         return isIE && largeDesktopView;
       },
+      /**
+       * Function to set view of internet explorer.
+       * And also work for other than internet explorer.
+       **/
       _largeDesktopViewOther: function (largeDesktopView) {
         // Internet Explorer 6-11
         var isIE = /*@cc_on!@*/false || !!document.documentMode;
@@ -373,9 +395,19 @@ The form handles below mentioned scenarios on its own.
         paperItem.textContent = "Need more rooms or have children?";
         this.querySelector("#deskinput1").blur();
       },
-
       /**
-      * This function is for date picker full screen dialog at mobile screen.
+      *This function is used for dropdown to work on tab key press.
+      */
+      _tabPress: function (e) {
+        if (e.keyCode == 38 || e.keyCode == 40) {
+          var pCard = Polymer.dom(this.$.paperCard).node;
+          pCard.style.display = 'none';
+          var paperItem = this.$$("#needRoom");
+          paperItem.textContent = "Need more rooms or have children?";
+        }
+      },
+      /**
+      * This function is for datepicker full screen dialog at mobile screen.
       **/
       _openDatePicker: function () {
         if (mq) {
@@ -393,8 +425,8 @@ The form handles below mentioned scenarios on its own.
           var endInput = Polymer.dom(this.$.end).node;
           startInput.children[0].style.textAlign = "center";
           endInput.children[0].style.textAlign = "center";
-          startInput.children[0].children[0].querySelector("#input").style.color = "black";
-          endInput.children[0].children[0].querySelector("#input").style.color = "black";
+          startInput.querySelector("#input").querySelector("#input").style.color = "black";
+          endInput.querySelector("#input").querySelector("#input").style.color = "black";
         }
         if (this.showTravellersCard = true) {
           this.showTravellersCard = !this.showTravellersCard
@@ -405,7 +437,7 @@ The form handles below mentioned scenarios on its own.
       },
 
       /*
-      *to open the paper-card on click of 'need more rooms or have children'
+      *to open the paper-card on click of 'need more rooms or have children'.
       *paper-card contains choice form.
       *this is used for toggle purpose.
       */
@@ -429,6 +461,9 @@ The form handles below mentioned scenarios on its own.
 
         var tBar = Polymer.dom(this.$.toolbarRoom).node;
         tBar.style.display = 'block';
+        var toolbarSpan = this.querySelector("#choiceCard").querySelector("#choiceRoom");
+        this.choice = 5;
+        toolbarSpan._calResultOfRoom();
         if (mq && this.showToolbar == true) {
           this.showToolbar = !this.showToolbar;
         }
@@ -453,6 +488,9 @@ The form handles below mentioned scenarios on its own.
           this.querySelector("#paperCard").style.display = "none";
         }
       },
+      /**
+      *This function is supportive function used to provide display style to main toolbar.
+      */
       _styleForBackToMainToolbar: function () {
         this.querySelector("#start1").style.display = "block";
         this.querySelector("#end1").style.display = "block";
@@ -463,8 +501,8 @@ The form handles below mentioned scenarios on its own.
 
 
       /**
-      * This function is used for done button which is used on the header ofdate picker on mobile screen.
-      * This is used for date picker.
+      * This function is used for done button which is used on the header of datepicker on mobile screen.
+      * This is used for datepicker.
       **/
       _doneDatePicker: function () {
         this.doneDatePicker = true;
@@ -476,7 +514,7 @@ The form handles below mentioned scenarios on its own.
       },
       /**
       * This is used for toolbar toggle.
-      * This function will work after clicking on back arrow button on date picker and travellers toolbar at mobile screen.
+      * This function will work after clicking on back arrow button on travellers toolbar at mobile screen.
       * This toolbar is used for only mobile screen.
       **/
       _showMainToolbar: function () {
@@ -494,7 +532,7 @@ The form handles below mentioned scenarios on its own.
         Polymer.dom(this.$.start1).node.classList.add("colorOfToolbarAtRuntime");
         Polymer.dom(this.$.end1).node.classList.add("colorOfToolbarAtRuntime");
         Polymer.dom(this.$.mainToolbar).node.classList.add("colorOfToolbarAtRuntime");
-
+        this.choice = 0;
         var dropdownInput = this.querySelector("#deskinput1").querySelector("#menuButton").domHost.querySelector("#input");
         if (this.doneRoomCard == false && this.doneRoomCardOutput == null) {
           dropdownInput.value = "1 Adult in 1 Room";
@@ -504,7 +542,11 @@ The form handles below mentioned scenarios on its own.
           dropdownInput.value = this.doneRoomCardOutput;
         }
       },
-
+      /**
+      * This is used for toolbar toggle.
+      * This function will work after clicking on back arrow button on datepicker toolbar at mobile screen.
+      * This toolbar is used for only mobile screen.
+      **/
       _showDateToolbar: function () {
         this._showDateToolbarFun();
         if (this.doneDatePicker == false && doneStartDate == null && doneEndDate == null) {
@@ -514,8 +556,11 @@ The form handles below mentioned scenarios on its own.
           this.querySelector("#start").value = doneStartDate;
           this.querySelector("#end").value = doneEndDate;
         }
+        this.querySelector("#end").querySelector(".underline").style.border = "none";
       },
-
+      /**
+      *This is supportive function which called in _showDateToolbar.
+      **/
       _showDateToolbarFun: function () {
         this.showTravellersCard = true;
         this.showToolbar = true;
@@ -533,12 +578,12 @@ The form handles below mentioned scenarios on its own.
         var endInput = Polymer.dom(this.$.end).node;
         startInput.children[0].style.textAlign = "";
         endInput.children[0].style.textAlign = "";
-        startInput.children[0].children[0].children[0].children[3].children[0].style.display = "block";
-        endInput.children[0].children[0].children[0].children[3].children[0].style.display = "block";
+        startInput.querySelector(".unfocused-line").style.display = "block";
+        endInput.querySelector(".unfocused-line").style.display = "block";
         startInput.querySelector("#labelAndInputContainer").style.marginRight = "";
         endInput.querySelector("#labelAndInputContainer").style.marginRight = "";
-        startInput.children[0].children[0].querySelector("#input").style.color = "white";
-        endInput.children[0].children[0].querySelector("#input").style.color = "white";
+        startInput.querySelector("#input").querySelector("#input").style.color = "white";
+        endInput.querySelector("#input").querySelector("#input").style.color = "white";
       },
       /**
        * This is used for toolbar toggle.
@@ -698,9 +743,10 @@ The form handles below mentioned scenarios on its own.
       },
 
       /* 
-      * function to control date picker for checkin and checkout dates.
+      * function to control datepicker for checkin and checkout dates.
       */
       ready: function () {
+        console.log(this.option);
         mqu = this.mediumTablet;
         mq = this.mobilePhone;
         mql = this.tabletView;
@@ -708,7 +754,7 @@ The form handles below mentioned scenarios on its own.
         var end = this.$$('#end');
         var CurrentDate;
         start.addEventListener('value-changed', function () {
-          // Open the end date picker with a delay to
+          // Open the end datepicker with a delay to
           // make it less confusing.
           window.setTimeout(function () {
             startDate = new Date();
@@ -719,7 +765,6 @@ The form handles below mentioned scenarios on its own.
               CurrentDate.setHours(0, 0, 0, 0);
               CurrentDate.setDate(CurrentDate.getDate());
             }
-            // end._showDialog();
             if (start.value > end.value) {
               end.value = CurrentDate;
             }

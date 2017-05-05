@@ -1,0 +1,20 @@
+
+    {
+        "en":{
+            "adult": "Adult",
+            "children": "Children",
+            "child": "Child",
+            "age": "Age",
+            "room": "Room",
+
+            
+            "checkIn": "MM/DD/YYYY",
+            "checkOut": "MM/DD/YYYY",
+            "hotelLocation": "City, Airport, Address or Point of Interest",
+
+            
+            "destinationError": "Please enter your destination",
+            "checkInError": "Please enter checkin date",
+            "checkOutError": "Please enter checkout date"
+        }
+    }
