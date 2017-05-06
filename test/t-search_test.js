@@ -76,16 +76,16 @@ suite('t-search', function () {
 
   //test case for button triggered in t-search.html
 
-  // test('search button can be triggered with enter', function () {
-  //   var button = document.querySelector("#button");
-  //   button.addEventListener('click', function () {
-  //               assert.equal(button.fire(new CustomEvent('click')));
+  test('search button can be triggered with enter', function () {
+    var button = document.querySelector("#button");
+    button.addEventListener('click', function () {
+                assert.equal(button.fire(new CustomEvent('click')));
 
-  //    // click();
-  //   });
-  //   MockInteractions.pressEnter(button);
+     // click();
+    });
+    MockInteractions.pressEnter(button);
 
-  // });
+  });
 
   //test case for dropdown open in t-search
 
@@ -124,25 +124,25 @@ suite('t-search', function () {
     MockInteractions.tap(button);
   });
   //test case for triggered done in choice-card.html
-  // test('done button can be triggered with enter', function () {
-  //   var card = document.querySelector("#choiceCard");
-  //   var button = card.querySelector("#button2");
-  //   button.addEventListener('click', function () {
-  //     expect(button.click).to.be.equal(true);
-  //     done();
-  //   });
-  //   MockInteractions.pressEnter(button);
-  // });
+  test('done button can be triggered with enter', function () {
+    var card = document.querySelector("#choiceCard");
+    var button = card.querySelector("#button2");
+    button.addEventListener('click', function () {
+      expect(button.click).to.be.equal(true);
+      done();
+    });
+    MockInteractions.pressEnter(button);
+  });
   //test case for triggered addRoom by enter in choice-card.html
-  // test('add room button can be triggered with enter', function () {
-  //   var card = document.querySelector("#choiceCard");
-  //   var button = card.querySelector("#button1");
-  //   button.addEventListener('click', function () {
-  //     expect(button.click).to.be.equal(true);
-  //     done();
-  //   });
-  //   MockInteractions.pressEnter(button);
-  // });
+  test('add room button can be triggered with enter', function () {
+    var card = document.querySelector("#choiceCard");
+    var button = card.querySelector("#button1");
+    button.addEventListener('click', function () {
+      expect(button.click).to.be.equal(true);
+      done();
+    });
+    MockInteractions.pressEnter(button);
+  });
 
 
   //test case for triggered used for done button which is used on the header ofdate picker on mobile screen in t-search.html

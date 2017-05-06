@@ -10,10 +10,10 @@
   <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../bower_components/web-component-tester/browser.js"></script>
   <script src="../bower_components/iron-test-helpers/mock-interactions.js"></script>
-  <script src="../test/t-search_test.js"></script>
-  <script src="../bower_components/test-fixture/test-fixture-mocha.js"></script>
+ <!-- <script src="../test/t-search_test.js"></script>
+  <script src="../bower_components/test-fixture/test-fixture-mocha.js"></script>-->
 
-  <link rel="import" href="../bower_components/iron-test-helpers/test-helpers.html">
+  <!--<link rel="import" href="../bower_components/iron-test-helpers/test-helpers.html">-->
   <link rel="import" href="../t-search.html">
 
 </head>
@@ -49,6 +49,11 @@
       test("choice default value for travellers dropdown in property", function () {
         assert.equal(header.choice, '0');
       });
+      // //test case for travellers dropdown toggle in t-search.html
+      // test("show variable for hidden traveller dropdown toggle", function () {
+      //   assert.equal(header.show, true)
+      // });
+      //test case for appearing the date in t-search.html
 
 
       //test case for check in date picker is appearing in t-search.html
@@ -70,16 +75,16 @@
 
       //test case for button triggered in t-search.html
 
-      // test('search button can be triggered with enter', function () {
-      //   var button = document.querySelector("#button");
-      //   button.addEventListener('click', function () {
-      //               assert.equal(button.fire(new CustomEvent('click')));
+      test('search button can be triggered with enter', function () {
+        var button = document.querySelector("#button");
+        button.addEventListener('click', function () {
+                    assert.equal(button.fire(new CustomEvent('click')));
 
-      //    // click();
-      //   });
-      //   MockInteractions.pressEnter(button);
+         // click();
+        });
+        MockInteractions.pressEnter(button);
 
-      // });
+      });
 
       //test case for dropdown open in t-search
 
@@ -118,25 +123,25 @@
         MockInteractions.tap(button);
       });
       //test case for triggered done in choice-card.html
-      // test('done button can be triggered with enter', function () {
-      //   var card = document.querySelector("#choiceCard");
-      //   var button = card.querySelector("#button2");
-      //   button.addEventListener('click', function () {
-      //     expect(button.click).to.be.equal(true);
-      //     done();
-      //   });
-      //   MockInteractions.pressEnter(button);
-      // });
+      test('done button can be triggered with enter', function () {
+        var card = document.querySelector("#choiceCard");
+        var button = card.querySelector("#button2");
+        button.addEventListener('click', function () {
+          expect(button.click).to.be.equal(true);
+          done();
+        });
+        MockInteractions.pressEnter(button);
+      });
       //test case for triggered addRoom by enter in choice-card.html
-      // test('add room button can be triggered with enter', function () {
-      //   var card = document.querySelector("#choiceCard");
-      //   var button = card.querySelector("#button1");
-      //   button.addEventListener('click', function () {
-      //     expect(button.click).to.be.equal(true);
-      //     done();
-      //   });
-      //   MockInteractions.pressEnter(button);
-      // });
+      test('add room button can be triggered with enter', function () {
+        var card = document.querySelector("#choiceCard");
+        var button = card.querySelector("#button1");
+        button.addEventListener('click', function () {
+          expect(button.click).to.be.equal(true);
+          done();
+        });
+        MockInteractions.pressEnter(button);
+      });
 
 
       //test case for triggered used for done button which is used on the header ofdate picker on mobile screen in t-search.html
@@ -325,8 +330,15 @@
         }
         isSelected();
       });
-
-      test('')
+      // _swipeNextMonth: function () {
+      //   if (!this.maxDate || this.currentYear < this.maxDate.getFullYear() || this.currentMonth < this.maxDate.getMonth() + 1) {
+      //     this._translateX(+1, 'swipe', function () {
+      //       this.set('_contentClass', '');
+      //       this.transform('translateX(' + this._startPos + 'px)', this.$.months);
+      //       this.fire('swiped', { direction: 'left' });
+      //     }.bind(this));
+      //   }
+      // },
 
     });
   </script>
