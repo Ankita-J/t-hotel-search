@@ -292,7 +292,7 @@ styling:
       },
       dateFormat: function () {
 
-        arguments[1] = "MM/DD/YY"
+        arguments[1] = this.domHost.domHost.option.date.format;
 
         return this.$.calendar.dateFormat.apply(this.$.calendar, arguments);
       },

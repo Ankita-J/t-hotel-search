@@ -8,9 +8,11 @@
           "dir": "./coverage",
           "reporters": ["text-summary", "lcov"],
           "include": [
-              "/t-search.html"
+              "test/t-search_test.html"
           ],
-          "exclude": []
+          "exclude": [
+            "t-search_test.js"
+          ]
       },
       "local": {
         "browsers": ["chrome"]

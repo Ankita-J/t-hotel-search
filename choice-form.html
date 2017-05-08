@@ -120,9 +120,9 @@ The form handles below mentioned scenarios on its own.
                     float: clear;
                 }
                 .childs1 {
-                    width: 25%;
+                    width: 30%;
                     float: left;
-                    margin-left: 16px;
+                    margin-left: 4px;
                     float: clear;
                 }
             }
@@ -178,11 +178,9 @@ The form handles below mentioned scenarios on its own.
                     <paper-dropdown-menu label="Adults" id$="adult{{_displayId()}}" class="inputAdultCount" required auto-validate error-message="Enter"
                         on-iron-select="_calResultOfRoom">
                         <paper-listbox id="listBox" class="dropdown-content" selected="{{countAdult}}">
-                            <paper-item>1</paper-item>
-                            <paper-item>2</paper-item>
-                            <paper-item>3</paper-item>
-                            <paper-item>4</paper-item>
-                            <paper-item>5</paper-item>
+                            <template is='dom-repeat' items='{{adultCountInRoom}}'>
+                                <paper-item value="{{item}}">{{item}}</paper-item>
+                            </template>
                         </paper-listbox>
                     </paper-dropdown-menu>
                     <div id="size">(12+ Years)</div>
@@ -193,12 +191,9 @@ The form handles below mentioned scenarios on its own.
                     <paper-dropdown-menu label="Children" id="child" on-iron-select='_onCount' class="inputChildCount" required auto-validate
                         error-message="Enter Child Count">
                         <paper-listbox id="listBox" class="dropdown-content" selected="{{countChildren}}">
-                            <paper-item>0</paper-item>
-                            <paper-item>1</paper-item>
-                            <paper-item>2</paper-item>
-                            <paper-item>3</paper-item>
-                            <paper-item on-tap="_scrollDown">4</paper-item>
-                            <paper-item on-tap="_scrollDown">5</paper-item>
+                            <template is='dom-repeat' items='{{childCountInRoom}}'>
+                                <paper-item value="{{item}}">{{item}}</paper-item>
+                            </template>
                         </paper-listbox>
                     </paper-dropdown-menu>
                     <div id="size">(0-11 Years)</div>
@@ -207,27 +202,17 @@ The form handles below mentioned scenarios on its own.
 
                 <template is='dom-repeat' items='{{ children }}'>
                     <div class="childs1">
-                        <paper-dropdown-menu on-tap="_ageLabelShow" on-keydown="_tabPress" class="ageOfChild" required auto-validate error-message="Enter age" label="Child {{_childIndex(index)}}"
-                            id="child{{_childID(index)}}">
+                        <paper-dropdown-menu on-tap="_ageLabelShow" on-keydown="_tabPress" class="ageOfChild" required auto-validate error-message="Enter age"
+                            label="Child {{_childIndex(index)}}" id="child{{_childID(index)}}">
                             <paper-listbox id="listBox" class="dropdown-content">
-                                <paper-item>&lt;1</paper-item>
-                                <paper-item>1</paper-item>
-                                <paper-item>2</paper-item>
-                                <paper-item>3</paper-item>
-                                <paper-item>4</paper-item>
-                                <paper-item>5</paper-item>
-                                <paper-item>6</paper-item>
-                                <paper-item>7</paper-item>
-                                <paper-item>8</paper-item>
-                                <paper-item>9</paper-item>
-                                <paper-item>10</paper-item>
-                                <paper-item>11</paper-item>
+                                 <template is='dom-repeat' items='{{childAgeCountInRoom}}'>
+                                <paper-item value="{{item}}">{{item}}</paper-item>
+                            </template>
                             </paper-listbox>
                         </paper-dropdown-menu>
                         <div id="size1{{_childID(index)}}" class="age">Age</div>
                     </div>
                 </template>
-
             </form>
         </div>
 
@@ -271,6 +256,45 @@ The form handles below mentioned scenarios on its own.
                     type: Number,
                     value: 0
                 },
+            
+
+                adultCountInRoom:{
+                  type: Array,
+                    value: function () {
+                        var childArray = new Array();
+                        var minimumAdult = this.dataHost.dataHost.domHost.domHost.option.traveller.minAdultCount;
+                        var maximumAdult = this.dataHost.dataHost.domHost.domHost.option.traveller.maxAdultCount;
+                        for (i = minimumAdult; i < maximumAdult; i++) {
+                            childArray.push(i);
+                        }
+                        return childArray;
+                    }
+                },
+                 childCountInRoom: {
+                    type: Array,
+                    value: function () {
+                        var childArray = new Array();
+                         var minimumChild = this.dataHost.dataHost.domHost.domHost.option.traveller.minChildCount;
+                        var maximumChild = this.dataHost.dataHost.domHost.domHost.option.traveller.maxChildCount;
+                        for (i = minimumChild; i < maximumChild; i++) {
+                            childArray.push(i);
+                        }
+                        return childArray;
+                    }
+                },
+
+                childAgeCountInRoom:{
+                  type: Array,
+                    value: function () {
+                        var childArray = new Array();
+                        var minimumChildAge = this.dataHost.dataHost.domHost.domHost.option.traveller.minChildAge;
+                        var maximumChildAge = this.dataHost.dataHost.domHost.domHost.option.traveller.maxChildAge;
+                        for (i = minimumChildAge; i < maximumChildAge; i++) {
+                            childArray.push(i);
+                        }
+                        return childArray;
+                    }
+                },
             },
 
             /**
@@ -312,10 +336,16 @@ The form handles below mentioned scenarios on its own.
                 setDropdownheight.children[0].children[0].style.overflowX = "hidden";
                 this.children = [];
             },
+
             _scrollDown: function () {
                 Polymer.RenderStatus.afterNextRender(this, function () {
                     var paperCardScroll = this.domHost.domHost.querySelector("#paperCard");
-                    paperCardScroll.scrollTop = paperCardScroll.scrollTop + 58;
+                    if (mq) {
+                        paperCardScroll.scrollTop = paperCardScroll.scrollTop + 98;
+                    }
+                    else {
+                        paperCardScroll.scrollTop = paperCardScroll.scrollTop + 58;
+                    }
                 });
             },
 
@@ -333,19 +363,22 @@ The form handles below mentioned scenarios on its own.
                 this._calResultOfRoom();
             },
 
+
+
+
             _ageLabelShow: function (event) {
                 var setAgeDropdownheight = event.currentTarget.children[1].children[1];
                 setAgeDropdownheight.style.height = "150px";
-                setAgeDropdownheight.children[0].children[0].style.overflowX = "hidden";                
+                setAgeDropdownheight.children[0].children[0].style.overflowX = "hidden";
                 var lblsize = event.currentTarget.id.replace("child", "size1");
                 event.currentTarget.invalid = false;
                 this.$$("#" + lblsize).style.visibility = "";
             },
-            _tabPress:function(e){
-                if(e.keyCode == 38 || e.keyCode ==40){
+            _tabPress: function (e) {
+                if (e.keyCode == 38 || e.keyCode == 40) {
                     e.currentTarget.invalid = false;
-                     var lblsize = e.currentTarget.id.replace("child", "size1");
-                      this.$$("#" + lblsize).style.visibility = "";
+                    var lblsize = e.currentTarget.id.replace("child", "size1");
+                    this.$$("#" + lblsize).style.visibility = "";
                 }
             },
 
@@ -419,7 +452,7 @@ The form handles below mentioned scenarios on its own.
                     var div = domCreate("div");
                     span.setAttribute("id", "spanId");
                     span.style.color = "lightgray";
-                    span.innerHtml = null;
+                    span.innerHtml = "1 Adult in 1 Room";
                     span.innerHTML = spanData;
                     div.style.textAlign = "center";
                     div.style.position = "relative";

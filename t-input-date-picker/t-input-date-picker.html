@@ -254,6 +254,11 @@ Example:
         value: 'today',
         reflectToAttribute: true
       },
+       
+       LastStartDate:{
+         type: Date,
+         value: new Date()
+       },
 
       /**
         * Set to true to disable the floating label. Bind this to the
@@ -400,11 +405,8 @@ Example:
     },
 
     _dismissDialog: function (event) {
-
+       this.async(function () {  
       var $this = this;
-      if ((!event.detail.canceled) && (event.detail.confirmed)) {
-        this.value = this.$picker.date;
-      }
       var startDate = this.domHost.querySelector("#start");
       var endDate = this.domHost.querySelector("#end");
       if (mq) {
@@ -424,59 +426,51 @@ Example:
           startDate.querySelector(".unfocused-line").style.display = "block";
           startDate.querySelector(".underline").style.border = "none";
         }
+        if ((!event.detail.canceled) && (event.detail.confirmed)) {
+           event.stopPropagation();
+        
       }
+      }
+       });
     },
 
-    _showDialog: function (event) {
-      this.querySelector("#calendar").scrollToMonth = 0;
-        var pcard = this.domHost.querySelector("#paperCard");
-        pcard.style.display = "none";      
+    _showDialog: function (event) {     
       var startDate = this.domHost.querySelector("#start");
       var endDate = this.domHost.querySelector("#end");
-      if (this.id == 'end' && startDate.value == undefined) {
-        startDate.invalid = true;
-        startDate.querySelector("#paper-input-add-on-1").style.width = "123%";
-      }
       if (this.id == 'end' && startDate.value != undefined) {
-        endDate.querySelector(".unfocused-line").style.display = "none";
         endDate.querySelector(".underline").style.border = "1px solid #4cb050";
-        this.$picker.date = (this.value) ? this.value : new Date();
+        endDate.querySelector(".unfocused-line").style.display = "none";
+         this.$picker.date = (this.value) ? this.value : new Date();
         this.$.dialog.toggle();
-        if (startDate.value) {
-          this.$picker.date = startDate.value;
-        }
+          if (startDate.value) {
+            this.$picker.date = endDate.value;
+          }
+           this.async(function () {  
+          if(this.LastStartDate.getTime() != startDate.value.getTime()){
+          this.querySelector("#calendar")._populate(startDate.value.getFullYear(), startDate.value.getMonth() + 1);
+          this.LastStartDate = startDate.value;
+          }
+           });
       }
       else if (this.id == 'start') {
-        startDate.querySelector(".unfocused-line").style.display = "none";
         startDate.querySelector(".underline").style.border = "1px solid #4cb050";
-        var pdialog = this.domHost.querySelector("#dialog");
-        pdialog.style.display = 'block';
+        startDate.querySelector(".unfocused-line").style.display = "none";
         startDate.invalid = false;
-        this.$picker.date = (this.value) ? this.value : new Date();
+         this.$picker.date = (this.value) ? this.value : new Date();
         this.$.dialog.toggle();
         if (endDate.value) {
           this.$picker.date = endDate.value;
         }
       }
-      if(this.domHost.querySelector)
-      
-      if (this.id == 'start' && startDate.value != undefined) {
-        PRELOAD_MONTHS = endDate.value.getMonth() - (startDate.value.getMonth() - 1);
-        this.querySelector("#calendar")._Refresh(startDate.value.getFullYear(), startDate.value.getMonth());
-          this.querySelector("#calendar").children[0].scrollTop =  300;
+       if (this.id == 'end' && startDate.value == undefined) {
+        startDate.invalid = true;
+         startDate.querySelector(".underline").style.border = "none";
+        startDate.querySelector("#paper-input-add-on-1").style.width = "123%";
       }
-      else if(this.id == 'start' && startDate.value === undefined){
-       this.querySelector("#calendar")._Refresh(new Date().getFullYear(), new Date().getMonth());
-           this.querySelector("#calendar").children[0].scrollTop =  0;
-       }
-
-      if (this.id == 'end' && startDate.value != undefined) {
-        PRELOAD_MONTHS = 1;
-        this.querySelector("#calendar")._Refresh(endDate.value.getFullYear(), endDate.value.getMonth());
-        this.querySelector("#calendar").children[0].scrollTop =  300;
-      }
-      
+       var pcard = this.domHost.querySelector("#paperCard");
+        pcard.style.display = "none"; 
     },
+    
   });
 
 </script>
